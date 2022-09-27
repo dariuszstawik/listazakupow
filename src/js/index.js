@@ -12,18 +12,28 @@ class Item {
         this.toBuy = true;
         this.bought = false;
         this.lack = false;
+        this.delete = false;
     }
 
     buyItem() {
         this.toBuy = false;
         this.bought = true;
         this.lack = false;
+        this.delete = false;
     }
 
     lackItem() {
         this.toBuy = false;
         this.bought = false;
         this.lack = true;
+        this.delete = false;
+    }
+
+    deleteItem() {
+        this.toBuy = false;
+        this.bought = false;
+        this.lack = false;
+        this.delete = true;
     }
 }
 
@@ -35,6 +45,10 @@ class ItemsList {
 addItemToList(item) {
     this.list.push(item);
 
+}
+
+resetList() {
+    this.list = [];
 }
 
 }
@@ -54,12 +68,12 @@ class Main {
             // console.log(myInput.value);
             if (myInput.value) {
                 let item = new Item(myInput.value);
-                console.log (item);
+                // console.log (item);
                 this.list.addItemToList(item);
-                console.log(this.list.list);
+                // console.log(this.list.list);
                 let visibleItem = document.createElement("li");
                 visibleItem.innerHTML = item.name;
-                console.log(visibleItem);
+                // console.log(visibleItem);
                 itemsList.appendChild(visibleItem);
 
                 let boughtIcon = document.createElement("span");
@@ -84,8 +98,23 @@ class Main {
                     console.log(main.list.list);
                 })
 
+                deleteIcon.addEventListener("click", ()=>{
+                    item.deleteItem();
+                    visibleItem.remove();
+                })
+
             }
+            myInput.value = "";
         })
+            resetBtn.addEventListener("click", ()=> {
+                this.list.resetList();
+                let lis = [...document.getElementsByTagName("li")];
+                for (let i=0; i<lis.length; i++) {
+                    lis[i].remove();
+                }
+
+            })
+
     }
 
 }
