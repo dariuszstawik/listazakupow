@@ -42,6 +42,17 @@ class ItemsList {
         this.list = [];
     }
 
+checkLocalStorage() {
+    let savedList = localStorage.getItem('savedList');
+    if (savedList) {
+        let lista = JSON.parse(savedList);
+        for (let i=0; i<lista.length; i++) {
+            this.list.push(lista[i]);
+        }
+    console.log(lista);
+    }
+}
+
 addItemToList(item) {
     this.list.push(item);
 
@@ -53,27 +64,27 @@ resetList() {
 
 }
 
+
 class Main {
     constructor() {
         this.list = new ItemsList();
+        window.onload = this.list.checkLocalStorage();
+
     
         let myForm = document.querySelector(".add-elements__form");
         let myInput = document.querySelector(".add-elements__input");
-        let resetBtn = document.querySelector(".reset__btn");
+        let resetBtn = document.querySelector(".buttons__reset");
+        let saveBtn = document.querySelector(".buttons__save");
         let itemsList = document.querySelector(".shopping-list__items");
         
         myForm.addEventListener("submit", (e) => {
             e.preventDefault();
-            // console.log("kliknąłeś");
-            // console.log(myInput.value);
+
             if (myInput.value) {
                 let item = new Item(myInput.value);
-                // console.log (item);
                 this.list.addItemToList(item);
-                // console.log(this.list.list);
                 let visibleItem = document.createElement("li");
                 visibleItem.innerHTML = item.name;
-                // console.log(visibleItem);
                 itemsList.appendChild(visibleItem);
 
                 let boughtIcon = document.createElement("span");
@@ -115,6 +126,9 @@ class Main {
 
             })
 
+            saveBtn.addEventListener("click", ()=> {
+                localStorage.setItem('savedList', JSON.stringify(this.list));
+            })
     }
 
 }
