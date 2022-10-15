@@ -7,33 +7,33 @@ import '../scss/main.scss';
 /* place your code below */
 
 class Item {
-    constructor(name) {
+    constructor(name, toBuy = true, bought = false, lack = false, eliminate = false) {
         this.name = name;
-        this.toBuy = true;
-        this.bought = false;
-        this.lack = false;
-        this.delete = false;
+        this.toBuy = toBuy;
+        this.bought = bought;
+        this.lack = lack;
+        this.eliminate = eliminate;
     }
 
     buyItem() {
         this.toBuy = false;
         this.bought = true;
         this.lack = false;
-        this.delete = false;
+        this.eliminate = false;
     }
 
     lackItem() {
         this.toBuy = false;
         this.bought = false;
         this.lack = true;
-        this.delete = false;
+        this.eliminate = false;
     }
 
     deleteItem() {
         this.toBuy = false;
         this.bought = false;
         this.lack = false;
-        this.delete = true;
+        this.eliminate = true;
     }
 }
 
@@ -47,9 +47,11 @@ checkLocalStorage() {
     if (savedList) {
         let lista = JSON.parse(savedList);
         for (let i=0; i<lista.length; i++) {
-            this.list.push(lista[i]);
+            console.log(lista[i]);
+            this.list.push(lista[i]);         
         }
-    console.log(lista);
+    console.log(this.list);
+    console.log(this.list.list); //undefined
     }
 }
 
@@ -62,6 +64,46 @@ resetList() {
     this.list = [];
 }
 
+// createLiElements(element) {
+//     console.log("this.list w createLiElements to" + this.list);
+//     console.log(this.list, this);
+//     let item = new Item(element);
+    
+
+//     // this.list.addItemToList(item);
+    
+//     let visibleItem = document.createElement("li");
+//     visibleItem.innerHTML = item.name;
+//     itemsList.appendChild(visibleItem);
+
+//     let boughtIcon = document.createElement("span");
+//     boughtIcon.className = "fa-solid fa-check";
+//     let lackIcon = document.createElement("span");
+//     lackIcon.className = "fa-solid fa-minus";
+//     let deleteIcon = document.createElement("span");
+//     deleteIcon.className = "fa-solid fa-xmark";
+//     visibleItem.appendChild(boughtIcon);
+//     visibleItem.appendChild(lackIcon);
+//     visibleItem.appendChild(deleteIcon);
+
+//     boughtIcon.addEventListener("click", ()=>{
+//         item.buyItem();
+//         visibleItem.style.backgroundColor = "green";
+//         // console.log(main.list.list);
+//     })
+
+//     lackIcon.addEventListener("click", ()=>{
+//         item.lackItem();
+//         visibleItem.style.backgroundColor = "red";
+//         // console.log(main.list.list);
+//     })
+
+//     deleteIcon.addEventListener("click", ()=>{
+//         item.deleteItem();
+//         visibleItem.remove();
+//     })
+// }
+
 }
 
 
@@ -69,18 +111,77 @@ class Main {
     constructor() {
         this.list = new ItemsList();
         window.onload = this.list.checkLocalStorage();
+        console.log(this.list);
+        console.log(this.list.list);
+        // console.log(this.list.list.length);
 
-    
         let myForm = document.querySelector(".add-elements__form");
         let myInput = document.querySelector(".add-elements__input");
         let resetBtn = document.querySelector(".buttons__reset");
         let saveBtn = document.querySelector(".buttons__save");
         let itemsList = document.querySelector(".shopping-list__items");
+
+
+        for (let i=0; i<(this.list.list).length; i++) {
+            // console.log(this.list.list[i]);
+            const item = new Item(this.list.list[i].name, this.list.list[i].toBuy, this.list.list[i].bought, this.list.list[i].lack, this.list.list[i].eliminate);
+            this.list.list[i] = item;
+
+
+            if (item.eliminate === false) {
+            let visibleItem = document.createElement("li");
+                visibleItem.innerHTML = item.name;
+                // console.log(visibleItem);
+                itemsList.appendChild(visibleItem);
+                if (item.bought === true) {
+                    visibleItem.style.backgroundColor = "green";
+                };
+
+                if (item.lack === true) {
+                    visibleItem.style.backgroundColor = "red";
+                };
+            
+
+                let boughtIcon = document.createElement("span");
+                boughtIcon.className = "fa-solid fa-check";
+                let lackIcon = document.createElement("span");
+                lackIcon.className = "fa-solid fa-minus";
+                let deleteIcon = document.createElement("span");
+                deleteIcon.className = "fa-solid fa-xmark";
+                visibleItem.appendChild(boughtIcon);
+                visibleItem.appendChild(lackIcon);
+                visibleItem.appendChild(deleteIcon);
+
+                boughtIcon.addEventListener("click", ()=>{
+                    // console.log(item);
+                    item.buyItem();
+                    console.log(item);
+                    visibleItem.style.backgroundColor = "green";
+                    console.log("kliknąłeś, że kupiłeś (2)");
+                    console.log(main.list.list);
+                    console.log(this.list.list);
+                    console.log(main.list);
+                    console.log(this.list);
+                    console.log(item);
+                })
+
+                lackIcon.addEventListener("click", ()=>{
+                    item.lackItem();
+                    visibleItem.style.backgroundColor = "red";
+                    // console.log(main.list.list);
+                })
+
+                deleteIcon.addEventListener("click", ()=>{
+                    item.deleteItem();
+                    visibleItem.remove();
+                })
+        }}
         
         myForm.addEventListener("submit", (e) => {
             e.preventDefault();
 
             if (myInput.value) {
+
                 let item = new Item(myInput.value);
                 this.list.addItemToList(item);
                 let visibleItem = document.createElement("li");
@@ -98,15 +199,19 @@ class Main {
                 visibleItem.appendChild(deleteIcon);
 
                 boughtIcon.addEventListener("click", ()=>{
+
                     item.buyItem();
+                    console.log(item);
                     visibleItem.style.backgroundColor = "green";
-                    console.log(main.list.list);
+                    console.log("kliknąłeś, że kupione")
+                    // console.log(main.list.list);
                 })
 
                 lackIcon.addEventListener("click", ()=>{
                     item.lackItem();
                     visibleItem.style.backgroundColor = "red";
-                    console.log(main.list.list);
+                    console.log("kliknąłeś, że brakuje")
+                    // console.log(main.list.list);
                 })
 
                 deleteIcon.addEventListener("click", ()=>{
@@ -119,6 +224,7 @@ class Main {
         })
             resetBtn.addEventListener("click", ()=> {
                 this.list.resetList();
+                localStorage.clear();
                 let lis = [...document.getElementsByTagName("li")];
                 for (let i=0; i<lis.length; i++) {
                     lis[i].remove();
@@ -127,7 +233,9 @@ class Main {
             })
 
             saveBtn.addEventListener("click", ()=> {
-                localStorage.setItem('savedList', JSON.stringify(this.list));
+                localStorage.setItem('savedList', JSON.stringify(this.list.list));
+                console.log(this.list.list);
+                console.log(this.list);
             })
     }
 
