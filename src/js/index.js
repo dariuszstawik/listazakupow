@@ -106,10 +106,37 @@ resetList() {
 
 }
 
+class Friend {
+    constructor() {
+        this.speachText = document.querySelector('.image-speech-bubble__text--js');
+        this.speachBought = ["Królu złoty! A 10 groszy byś nie dał?", "Świetny zakup, Szefie!", "Zrobimy z tego drinka?", "Będzie na zakąskę", "Królu złoty, kupisz mi też takie?", "Mogę gryza?"]
+        this.speachLack = ["Szefie, a jak to znajdę, to kupisz mi wino?", "Ja bym jeszcze poszukał", "Nic nie ma w tych sklepach", "Nie ma co, chodźmy się napić"]
+    }
+
+    friendTalking(situation) {
+        if (situation === "bought") {
+        console.log(this.speachBought.length);
+        let index = Math.floor(Math.random()*this.speachBought.length);
+        console.log(index);
+        console.log(this.speachBought[index])
+        this.speachText.textContent = this.speachBought[index];
+        }
+        else if (situation === "lack") {
+            console.log(this.speachLack.length);
+            let index = Math.floor(Math.random()*this.speachLack.length);
+            console.log(index);
+            console.log(this.speachLack[index])
+            this.speachText.textContent = this.speachLack[index];
+                
+        }
+    }
+}
+
 
 class Main {
     constructor() {
         this.list = new ItemsList();
+        this.friend = new Friend();
         window.onload = this.list.checkLocalStorage();
         console.log(this.list);
         console.log(this.list.list);
@@ -158,16 +185,18 @@ class Main {
                     console.log(item);
                     visibleItem.style.backgroundColor = "green";
                     console.log("kliknąłeś, że kupiłeś (2)");
-                    console.log(main.list.list);
-                    console.log(this.list.list);
-                    console.log(main.list);
-                    console.log(this.list);
-                    console.log(item);
+                    this.friend.friendTalking("bought");
+                    // console.log(main.list.list);
+                    // console.log(this.list.list);
+                    // console.log(main.list);
+                    // console.log(this.list);
+                    // console.log(item);
                 })
 
                 lackIcon.addEventListener("click", ()=>{
                     item.lackItem();
                     visibleItem.style.backgroundColor = "red";
+                    this.friend.friendTalking("lack");
                     // console.log(main.list.list);
                 })
 
@@ -203,6 +232,7 @@ class Main {
                     item.buyItem();
                     console.log(item);
                     visibleItem.style.backgroundColor = "green";
+                    this.friend.friendTalking("bought");
                     console.log("kliknąłeś, że kupione")
                     // console.log(main.list.list);
                 })
@@ -211,6 +241,7 @@ class Main {
                     item.lackItem();
                     visibleItem.style.backgroundColor = "red";
                     console.log("kliknąłeś, że brakuje")
+                    this.friend.friendTalking("lack");
                     // console.log(main.list.list);
                 })
 
