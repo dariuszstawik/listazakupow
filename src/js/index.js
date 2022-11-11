@@ -47,11 +47,10 @@ checkLocalStorage() {
     if (savedList) {
         let lista = JSON.parse(savedList);
         for (let i=0; i<lista.length; i++) {
-            console.log(lista[i]);
-            this.list.push(lista[i]);         
+            if (!lista[i].eliminate) {
+            this.list.push(lista[i]);
+            };         
         }
-    console.log(this.list);
-    console.log(this.list.list); //undefined
     }
 }
 
@@ -64,46 +63,6 @@ resetList() {
     this.list = [];
 }
 
-// createLiElements(element) {
-//     console.log("this.list w createLiElements to" + this.list);
-//     console.log(this.list, this);
-//     let item = new Item(element);
-    
-
-//     // this.list.addItemToList(item);
-    
-//     let visibleItem = document.createElement("li");
-//     visibleItem.innerHTML = item.name;
-//     itemsList.appendChild(visibleItem);
-
-//     let boughtIcon = document.createElement("span");
-//     boughtIcon.className = "fa-solid fa-check";
-//     let lackIcon = document.createElement("span");
-//     lackIcon.className = "fa-solid fa-minus";
-//     let deleteIcon = document.createElement("span");
-//     deleteIcon.className = "fa-solid fa-xmark";
-//     visibleItem.appendChild(boughtIcon);
-//     visibleItem.appendChild(lackIcon);
-//     visibleItem.appendChild(deleteIcon);
-
-//     boughtIcon.addEventListener("click", ()=>{
-//         item.buyItem();
-//         visibleItem.style.backgroundColor = "green";
-//         // console.log(main.list.list);
-//     })
-
-//     lackIcon.addEventListener("click", ()=>{
-//         item.lackItem();
-//         visibleItem.style.backgroundColor = "red";
-//         // console.log(main.list.list);
-//     })
-
-//     deleteIcon.addEventListener("click", ()=>{
-//         item.deleteItem();
-//         visibleItem.remove();
-//     })
-// }
-
 }
 
 class Friend {
@@ -114,20 +73,12 @@ class Friend {
     }
 
     friendTalking(situation) {
-        if (situation === "bought") {
-        console.log(this.speachBought.length);
         let index = Math.floor(Math.random()*this.speachBought.length);
-        console.log(index);
-        console.log(this.speachBought[index])
+        if (situation === "bought") {
         this.speachText.textContent = this.speachBought[index];
         }
         else if (situation === "lack") {
-            console.log(this.speachLack.length);
-            let index = Math.floor(Math.random()*this.speachLack.length);
-            console.log(index);
-            console.log(this.speachLack[index])
             this.speachText.textContent = this.speachLack[index];
-                
         }
     }
 }
@@ -138,121 +89,99 @@ class Main {
         this.list = new ItemsList();
         this.friend = new Friend();
         window.onload = this.list.checkLocalStorage();
-        console.log(this.list);
-        console.log(this.list.list);
-        // console.log(this.list.list.length);
 
-        let myForm = document.querySelector(".add-elements__form");
-        let myInput = document.querySelector(".add-elements__input");
-        let resetBtn = document.querySelector(".buttons__reset");
-        let saveBtn = document.querySelector(".buttons__save");
-        let itemsList = document.querySelector(".shopping-list__items");
+    let myForm = document.querySelector(".add-elements__form");
+    let myInput = document.querySelector(".add-elements__input");
+    let resetBtn = document.querySelector(".buttons__reset");
+    let saveBtn = document.querySelector(".buttons__save");
+    let itemsList = document.querySelector(".shopping-list__items");
 
+    const addLi = (val) => {
+        
+        let val1;
 
-        for (let i=0; i<(this.list.list).length; i++) {
-            // console.log(this.list.list[i]);
-            const item = new Item(this.list.list[i].name, this.list.list[i].toBuy, this.list.list[i].bought, this.list.list[i].lack, this.list.list[i].eliminate);
-            this.list.list[i] = item;
+        let item;
 
+        if (typeof val === "string") {
+            item = new Item(val);
+            this.list.addItemToList(item);
+            val1 = val;
+        } else {
+            item = val;
+            val1 = val.name;
+        };
 
-            if (item.eliminate === false) {
-            let visibleItem = document.createElement("li");
-                visibleItem.innerHTML = item.name;
-                // console.log(visibleItem);
-                itemsList.appendChild(visibleItem);
-                if (item.bought === true) {
-                    visibleItem.style.backgroundColor = "green";
-                };
+        let newLi = document.createElement("li");
+        newLi.textContent = val1;
+        itemsList.appendChild(newLi);
 
-                if (item.lack === true) {
-                    visibleItem.style.backgroundColor = "red";
-                };
-            
-
-                let boughtIcon = document.createElement("span");
-                boughtIcon.className = "fa-solid fa-check";
+        if (val.bought === true) {
+            newLi.style.backgroundColor = "green";
+            };
+        
+        if (val.lack === true) {
+            newLi.style.backgroundColor = "red";
+            };
+    
+        const createIcons = () => {
+            let boughtIcon = document.createElement("span");
+            boughtIcon.className = "fa-solid fa-check";
                 let lackIcon = document.createElement("span");
                 lackIcon.className = "fa-solid fa-minus";
                 let deleteIcon = document.createElement("span");
                 deleteIcon.className = "fa-solid fa-xmark";
-                visibleItem.appendChild(boughtIcon);
-                visibleItem.appendChild(lackIcon);
-                visibleItem.appendChild(deleteIcon);
+    
+                newLi.appendChild(boughtIcon);
+                newLi.appendChild(lackIcon);
+                newLi.appendChild(deleteIcon);
+    
+                const afterClick = (button) => {
+    
+                    button.addEventListener("click", () => {
+                        if (button === boughtIcon) {
+                            newLi.style.backgroundColor = "green";
+                            item.buyItem();
+                            this.friend.friendTalking("bought");
+                        }
+                        else if (button === lackIcon) {
+                            newLi.style.backgroundColor = "red";
+                            item.lackItem();
+                            this.friend.friendTalking("lack");
+                        }
+                        else if (button === deleteIcon) {
+                            newLi.remove();
+                            item.deleteItem();
+                        }; 
+                    });
+                };
+    
+                afterClick(boughtIcon);
+                afterClick(lackIcon);
+                afterClick(deleteIcon);
+        }
+    
+        createIcons();
+    
+    };
 
-                boughtIcon.addEventListener("click", ()=>{
-                    // console.log(item);
-                    item.buyItem();
-                    console.log(item);
-                    visibleItem.style.backgroundColor = "green";
-                    console.log("kliknąłeś, że kupiłeś (2)");
-                    this.friend.friendTalking("bought");
-                    // console.log(main.list.list);
-                    // console.log(this.list.list);
-                    // console.log(main.list);
-                    // console.log(this.list);
-                    // console.log(item);
-                })
 
-                lackIcon.addEventListener("click", ()=>{
-                    item.lackItem();
-                    visibleItem.style.backgroundColor = "red";
-                    this.friend.friendTalking("lack");
-                    // console.log(main.list.list);
-                })
+        for (let i=0; i<(this.list.list).length; i++) {
+            const item = new Item(this.list.list[i].name, this.list.list[i].toBuy, this.list.list[i].bought, this.list.list[i].lack, this.list.list[i].eliminate);
+            this.list.list[i] = item;
+            
+            addLi(item);
+        };
 
-                deleteIcon.addEventListener("click", ()=>{
-                    item.deleteItem();
-                    visibleItem.remove();
-                })
-        }}
-        
         myForm.addEventListener("submit", (e) => {
             e.preventDefault();
 
             if (myInput.value) {
-
-                let item = new Item(myInput.value);
-                this.list.addItemToList(item);
-                let visibleItem = document.createElement("li");
-                visibleItem.innerHTML = item.name;
-                itemsList.appendChild(visibleItem);
-
-                let boughtIcon = document.createElement("span");
-                boughtIcon.className = "fa-solid fa-check";
-                let lackIcon = document.createElement("span");
-                lackIcon.className = "fa-solid fa-minus";
-                let deleteIcon = document.createElement("span");
-                deleteIcon.className = "fa-solid fa-xmark";
-                visibleItem.appendChild(boughtIcon);
-                visibleItem.appendChild(lackIcon);
-                visibleItem.appendChild(deleteIcon);
-
-                boughtIcon.addEventListener("click", ()=>{
-
-                    item.buyItem();
-                    console.log(item);
-                    visibleItem.style.backgroundColor = "green";
-                    this.friend.friendTalking("bought");
-                    console.log("kliknąłeś, że kupione")
-                    // console.log(main.list.list);
-                })
-
-                lackIcon.addEventListener("click", ()=>{
-                    item.lackItem();
-                    visibleItem.style.backgroundColor = "red";
-                    console.log("kliknąłeś, że brakuje")
-                    this.friend.friendTalking("lack");
-                    // console.log(main.list.list);
-                })
-
-                deleteIcon.addEventListener("click", ()=>{
-                    item.deleteItem();
-                    visibleItem.remove();
-                })
-
+                addLi(myInput.value);
             }
             myInput.value = "";
-        })
+        });
+
+
             resetBtn.addEventListener("click", ()=> {
                 this.list.resetList();
                 localStorage.clear();
@@ -265,11 +194,35 @@ class Main {
 
             saveBtn.addEventListener("click", ()=> {
                 localStorage.setItem('savedList', JSON.stringify(this.list.list));
-                console.log(this.list.list);
-                console.log(this.list);
             })
     }
 
 }
 
 const main = new Main;
+
+
+                // const sortList1 = (currentLi) => {
+                //     this.list.sortList("bought");
+                //     let index = this.list.list.indexOf(val);
+                //     console.log(index); 
+
+                //     // let liCollection = [...document.getElementsByTagName("li")];
+                //     // let index = liCollection.indexOf(currentLi);
+                //     // itemsList.insertBefore(currentLi, liCollection[index+3]);
+                // };
+
+                // sortList(task) {
+                //     if (task === "bought") {
+                
+                //     this.list.sort((a,b)=> {
+                //         return a.bought - b.bought;
+                //     });
+                // }
+                
+                // else if (task === "lack") {
+                //     this.list.sort((a,b)=> {
+                //         return a.lack - b.lack;
+                //     });
+                // }
+                // }
