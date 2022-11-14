@@ -67,7 +67,7 @@ resetList() {
 
 class Friend {
     constructor() {
-        this.speachText = document.querySelector('.image-speech-bubble__text--js');
+        this.speachText = document.querySelector('.friend-speech-bubble__text--js');
         this.speachBought = ["Królu złoty! A 10 groszy byś nie dał?", "Świetny zakup, Szefie!", "Zrobimy z tego drinka?", "Będzie na zakąskę", "Królu złoty, kupisz mi też takie?", "Mogę gryza?"]
         this.speachLack = ["Szefie, a jak to znajdę, to kupisz mi wino?", "Ja bym jeszcze poszukał", "Nic nie ma w tych sklepach", "Nie ma co, chodźmy się napić"]
     }
@@ -90,11 +90,11 @@ class Main {
         this.friend = new Friend();
         window.onload = this.list.checkLocalStorage();
 
-    let myForm = document.querySelector(".add-elements__form");
-    let myInput = document.querySelector(".add-elements__input");
-    let resetBtn = document.querySelector(".buttons__reset");
-    let saveBtn = document.querySelector(".buttons__save");
-    let itemsList = document.querySelector(".shopping-list__items");
+    let myForm = document.querySelector(".add-elements__form--js");
+    let myInput = document.querySelector(".add-elements__input--js");
+    let resetBtn = document.querySelector(".buttons__reset--js");
+    let saveBtn = document.querySelector(".buttons__save--js");
+    let itemsList = document.querySelector(".shopping-list__items--js");
 
     const addLi = (val) => {
         
