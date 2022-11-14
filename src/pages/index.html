@@ -147,29 +147,27 @@
   </head>
   <body>
     <header class = "header">
-      <h1 class = "header__title">Prosta lista zakupów</h1>
+      <h1 class = "header__title">Lista zakupów Króla Złotego</h1>
     </header>
     <section class = "add-elements">
       <h2 class = "add-elements__heading">do kupienia</h2>
-      <form class = "add-elements__form" action = "">
-      <input type = "text" class = "add-elements__input">
+      <form class = "add-elements__form add-elements__form--js" action = "">
+      <input type = "text" class = "add-elements__input add-elements__input--js">
       <button class = "add-elements__btn">dodaj do listy</button>
     </form>
     </section>
     <section class = "shopping-list">
-      <ul class = "shopping-list__items"></ul>
-      <ul class = "shopping-list__items--bought"></ul>
-      <ul class = "shopping-list__items--lack"></ul>
+      <ul class = "shopping-list__items shopping-list__items--js"></ul>
     </section>
 
     <section class = "buttons">
-      <button class = "buttons__reset">resetuj listę</button>
-      <button class = "buttons__save">zapisz listę</button>
+      <button class = "buttons__reset buttons__reset--js">resetuj listę</button>
+      <button class = "buttons__save buttons__save--js">zapisz listę</button>
     </section>
 
     <section class = "friend">
-      <div class="image-speech-bubble image-speech-bubble--js hidden--js">
-        <span class="image-speech-bubble__text image-speech-bubble__text--js">Jesteś zwycięzcą!</span>
+      <div class="friend-speech-bubble image-speech-bubble--js hidden--js">
+        <span class="friend-speech-bubble__text image-speech-bubble__text--js">Królu złoty! Ja pomogę w zakupach! A 20 groszy byś znalazł?</span>
       </div>
 
     </section>

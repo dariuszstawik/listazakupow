@@ -67,9 +67,9 @@ resetList() {
 
 class Friend {
     constructor() {
-        this.speachText = document.querySelector('.friend-speech-bubble__text--js');
-        this.speachBought = ["Królu złoty! A 10 groszy byś nie dał?", "Świetny zakup, Szefie!", "Zrobimy z tego drinka?", "Będzie na zakąskę", "Królu złoty, kupisz mi też takie?", "Mogę gryza?"]
-        this.speachLack = ["Szefie, a jak to znajdę, to kupisz mi wino?", "Ja bym jeszcze poszukał", "Nic nie ma w tych sklepach", "Nie ma co, chodźmy się napić"]
+        this.speachText = document.querySelector('.image-speech-bubble__text--js');
+        this.speachBought = ["Królu złoty! A 10 groszy byś nie dał?", "Szefie, to będzie dla mnie?", "Świetny zakup, Szefie!", "Zrobimy z tego drinka?", "Będzie na zakąskę", "Królu złoty, kupisz mi też takie?", "Mogę gryza?", "Królu Złoty, brawo!", "Szefie, zakupy z tobą to przyjemność!", "Super! Teraz idziemy po wino!", "UUU... będzie impreza!", "Królu Złoty, tak se dorzucasz do koszyka, a co dla mnie?"]
+        this.speachLack = ["Szefie, a jak to znajdę, to kupisz mi wino?", "Ja bym jeszcze poszukał", "Nic nie ma w tych sklepach", "Nie ma co, chodźmy się napić", "Królu Złoty, taka oszczędność, daj na winiacza!"]
     }
 
     friendTalking(situation) {
