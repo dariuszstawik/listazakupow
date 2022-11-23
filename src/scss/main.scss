@@ -3,10 +3,135 @@
 @import "_variables";
 @import "modules/hello.scss";
 
-// body {
-//     display: grid;
-//     grid-template-columns: repeat(12, 1fr);
-// };
+@keyframes bubble {
+    0% {
+      opacity: 0;
+    }
+  
+    20% {
+      opacity: 1;
+    }
+  
+    80% {
+      opacity: 1;
+    }
+  
+    100% {
+      opacity: 0;
+    }
+  }
+
+
+
+body {
+    width: 100vw;
+    height: 90%;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+.main {
+    width: 320px;
+    height: 100vh;
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    grid-template-rows: 2fr 1fr 6fr 2fr;
+
+    @media(min-width: $tablet) {
+        border: 1px solid gray;
+    }
+};
+
+.fa-solid {
+    margin: 3px;
+}
+
+
+.header {
+grid-column: 2/11;
+grid-row: 1/2;
+
+&__title {
+    text-align: center;
+}
+&__subtitle {
+    text-align: center;
+}
+
+};
+
+.add-elements {
+    grid-column: 2/12;
+    grid-row: 2/3;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+};
+
+.shopping-list {
+    grid-column: 2/12;
+    grid-row: 3/4;
+    overflow: auto;
+
+    &__items {
+        list-style-type: none;
+    }
+
+    &__item {
+        display: block;
+        margin: 5px;
+        display: flex;
+        justify-content: space-between; 
+    }
+
+    &__item-name{
+        display: inline-block;
+        line-height: 200%;
+        flex-grow: 1;
+    }
+    &__icons {
+        display: inline-block;
+    }
+};
+
+
+.friend {
+    position: relative;
+    grid-column: 2/6;
+    grid-row: 4/5;
+    &__image {
+        width: 100px;
+        height: 100px;
+    }
+
+    &-speech-bubble {
+        position: relative;
+        background-image: url("../assets/img/speech_bubble.svg");
+        background-repeat: no-repeat;
+        top: -270px;
+        width: 200px;
+        height: 180px;
+        z-index: 1;
+        animation: bubble 3s linear forwards;
+      
+        &__text {
+          display: inline-block;
+          padding: 15%;
+          width: 70%;
+          top: 22%;
+          z-index: 1;
+          text-align: center;
+        }
+    }
+};
+
+.buttons {
+    grid-column: 7/12;
+    grid-row: 4/5;
+}
 
 
 

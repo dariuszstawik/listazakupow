@@ -1,5 +1,6 @@
 import '../scss/main.scss';
 
+
 // uncomment the lines below to enable PWA
 // import {registerSW} from './pwa.js';
 // registerSW();
@@ -45,10 +46,10 @@ class ItemsList {
 checkLocalStorage() {
     let savedList = localStorage.getItem('savedList');
     if (savedList) {
-        let lista = JSON.parse(savedList);
-        for (let i=0; i<lista.length; i++) {
-            if (!lista[i].eliminate) {
-            this.list.push(lista[i]);
+        let loadedList = JSON.parse(savedList);
+        for (let i=0; i<loadedList.length; i++) {
+            if (!loadedList[i].eliminate) {
+            this.list.push(loadedList[i]);
             };         
         }
     }
@@ -67,18 +68,23 @@ resetList() {
 
 class Friend {
     constructor() {
-        this.speachText = document.querySelector('.image-speech-bubble__text--js');
-        this.speachBought = ["Królu złoty! A 10 groszy byś nie dał?", "Szefie, to będzie dla mnie?", "Świetny zakup, Szefie!", "Zrobimy z tego drinka?", "Będzie na zakąskę", "Królu złoty, kupisz mi też takie?", "Mogę gryza?", "Królu Złoty, brawo!", "Szefie, zakupy z tobą to przyjemność!", "Super! Teraz idziemy po wino!", "UUU... będzie impreza!", "Królu Złoty, tak se dorzucasz do koszyka, a co dla mnie?"]
-        this.speachLack = ["Szefie, a jak to znajdę, to kupisz mi wino?", "Ja bym jeszcze poszukał", "Nic nie ma w tych sklepach", "Nie ma co, chodźmy się napić", "Królu Złoty, taka oszczędność, daj na winiacza!"]
+        this.speechBubble = document.querySelector('.friend-speech-bubble--js');
+        this.speechText = document.querySelector('.friend-speech-bubble__text--js');
+        this.speechBought = ["Królu złoty! A 10 groszy byś nie dał?", "Szefie, to będzie dla mnie?", "Świetny zakup, Szefie!", "Zrobimy z tego drinka?", "Będzie na zakąskę", "Królu złoty, kupisz mi też takie?", "Mogę gryza?", "Królu Złoty, brawo!", "Szefie, zakupy z tobą to przyjemność!", "Super! Teraz idziemy po wino!", "UUU... będzie impreza!", "Królu Złoty, tak se dorzucasz do koszyka, a co dla mnie?"]
+        this.speechLack = ["Szefie, a jak to znajdę, to kupisz mi wino?", "Ja bym jeszcze poszukał", "Nic nie ma w tych sklepach", "Nie ma co, chodźmy się napić", "Królu Złoty, taka oszczędność, daj na winiacza!", "Szefie, to jest w Biedrze, daj kasę, to kupię", "Teraz coś dla mnie, Królu Złoty", "Królu Złoty, widziałem takie pod śmietnikiem - przynieść?"]
     }
 
     friendTalking(situation) {
-        let index = Math.floor(Math.random()*this.speachBought.length);
+        
         if (situation === "bought") {
-        this.speachText.textContent = this.speachBought[index];
+        let index = Math.floor(Math.random()*this.speechBought.length);
+        this.speechText.textContent = this.speechBought[index];
+        this.speechBubble.animate([{opacity: 0}, {opacity: 1}, {opacity: 1}, {opacity: 0}], {duration: 3000});
         }
         else if (situation === "lack") {
-            this.speachText.textContent = this.speachLack[index];
+            let index = Math.floor(Math.random()*this.speechLack.length);
+            this.speechText.textContent = this.speechLack[index];
+            this.speechBubble.animate([{opacity: 0}, {opacity: 1}, {opacity: 1}, {opacity: 0}], {duration: 3000});
         }
     }
 }
@@ -90,11 +96,11 @@ class Main {
         this.friend = new Friend();
         window.onload = this.list.checkLocalStorage();
 
-    let myForm = document.querySelector(".add-elements__form--js");
-    let myInput = document.querySelector(".add-elements__input--js");
-    let resetBtn = document.querySelector(".buttons__reset--js");
-    let saveBtn = document.querySelector(".buttons__save--js");
-    let itemsList = document.querySelector(".shopping-list__items--js");
+    const myForm = document.querySelector(".add-elements__form--js");
+    const myInput = document.querySelector(".add-elements__input--js");
+    const resetBtn = document.querySelector(".buttons__reset--js");
+    const saveBtn = document.querySelector(".buttons__save--js");
+    const itemsList = document.querySelector(".shopping-list__items--js");
 
     const addLi = (val) => {
         
@@ -112,15 +118,23 @@ class Main {
         };
 
         let newLi = document.createElement("li");
-        newLi.textContent = val1;
+        newLi.className = "shopping-list__item";
+        let newLiName = document.createElement("span");
+        newLiName.className = "shopping-list__item-name";
+        let newLiIcons = document.createElement("span");
+        newLiIcons.className = "shopping-list__item-icons";
+
+        newLiName.textContent = val1;
         itemsList.appendChild(newLi);
+        newLi.appendChild(newLiName);
+        newLi.appendChild(newLiIcons);
 
         if (val.bought === true) {
-            newLi.style.backgroundColor = "green";
+            newLiName.style.backgroundColor = "#004d00ff";
             };
         
         if (val.lack === true) {
-            newLi.style.backgroundColor = "red";
+            newLiName.style.backgroundColor = "#ff655cff";
             };
     
         const createIcons = () => {
@@ -131,20 +145,20 @@ class Main {
                 let deleteIcon = document.createElement("span");
                 deleteIcon.className = "fa-solid fa-xmark";
     
-                newLi.appendChild(boughtIcon);
-                newLi.appendChild(lackIcon);
-                newLi.appendChild(deleteIcon);
+                newLiIcons.appendChild(boughtIcon);
+                newLiIcons.appendChild(lackIcon);
+                newLiIcons.appendChild(deleteIcon);
     
                 const afterClick = (button) => {
     
                     button.addEventListener("click", () => {
                         if (button === boughtIcon) {
-                            newLi.style.backgroundColor = "green";
+                            newLiName.style.backgroundColor = "#004d00ff";
                             item.buyItem();
                             this.friend.friendTalking("bought");
                         }
                         else if (button === lackIcon) {
-                            newLi.style.backgroundColor = "red";
+                            newLiName.style.backgroundColor = "#ff655cff";
                             item.lackItem();
                             this.friend.friendTalking("lack");
                         }
@@ -185,9 +199,9 @@ class Main {
             resetBtn.addEventListener("click", ()=> {
                 this.list.resetList();
                 localStorage.clear();
-                let lis = [...document.getElementsByTagName("li")];
-                for (let i=0; i<lis.length; i++) {
-                    lis[i].remove();
+                let liCollection = [...document.getElementsByTagName("li")];
+                for (let i=0; i<liCollection.length; i++) {
+                    liCollection[i].remove();
                 }
 
             })
@@ -200,29 +214,3 @@ class Main {
 }
 
 const main = new Main;
-
-
-                // const sortList1 = (currentLi) => {
-                //     this.list.sortList("bought");
-                //     let index = this.list.list.indexOf(val);
-                //     console.log(index); 
-
-                //     // let liCollection = [...document.getElementsByTagName("li")];
-                //     // let index = liCollection.indexOf(currentLi);
-                //     // itemsList.insertBefore(currentLi, liCollection[index+3]);
-                // };
-
-                // sortList(task) {
-                //     if (task === "bought") {
-                
-                //     this.list.sort((a,b)=> {
-                //         return a.bought - b.bought;
-                //     });
-                // }
-                
-                // else if (task === "lack") {
-                //     this.list.sort((a,b)=> {
-                //         return a.lack - b.lack;
-                //     });
-                // }
-                // }
